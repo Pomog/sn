@@ -3,7 +3,7 @@ package models
 import (
 	"database/sql"
 	"fmt"
-	"github.com/Pomog/sn/backend/models/queries"
+	"github.com/Pomog/sn/backend/queries"
 	"time"
 )
 
