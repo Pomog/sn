@@ -19,7 +19,6 @@ type QueryProvider struct {
 }
 
 // NewQueryProvider makes a new query provider, given a database and a root path.
-// For example, a root path of "user" would retrieve all ".sql" files in "social-network/backend/queries/sql/user/".
 func NewQueryProvider(db *sql.DB, root string) QueryProvider {
 	return QueryProvider{
 		db:      db,
