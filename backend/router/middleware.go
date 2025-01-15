@@ -18,7 +18,7 @@ func ApplyMiddleware(final http.Handler, funcs ...func(http.Handler) http.Handle
 
 // Recover catches panics in a handler and lets a custom handler handle the request instead.
 // It logs the error if specified.
-func Recover(next, recoverer http.Handler, logErr bool) http.Handler {
+func Recover(next, recoveryHandler http.Handler, logErr bool) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
@@ -26,7 +26,7 @@ func Recover(next, recoverer http.Handler, logErr bool) http.Handler {
 					log.Println(err) // Log the panic if requested.
 					// debug.PrintStack() // Optional: Uncomment to print stack trace.
 				}
-				recoverer.ServeHTTP(w, r) // Serve the recovery handler.
+				recoveryHandler.ServeHTTP(w, r) // Serve the recovery handler.
 			}
 		}()
 
