@@ -20,17 +20,22 @@ func ApplyMiddleware(final http.Handler, funcs ...func(http.Handler) http.Handle
 // It logs the error if specified.
 func Recover(next, recoveryHandler http.Handler, logErr bool) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// `defer` ensures that this function is called when the enclosing function exits, even if a panic occurs.
 		defer func() {
+			// If a panic occurred during the execution of the `next` handler, it will be caught here.
 			if err := recover(); err != nil {
+				// If logErr is true, log the panic error.
 				if logErr {
-					log.Println(err) // Log the panic if requested.
-					// debug.PrintStack() // Optional: Uncomment to print stack trace.
+					log.Println(err) // Log the panic error message.
+					// debug.PrintStack() // Optional: Uncomment to print stack trace for debugging.
 				}
-				recoveryHandler.ServeHTTP(w, r) // Serve the recovery handler.
+				// After handling the error, serve the recovery handler (`recoveryHandler`).
+				recoveryHandler.ServeHTTP(w, r)
 			}
 		}()
 
-		next.ServeHTTP(w, r) // Proceed with the next handler.
+		// Call the next handler in the chain (the one processing the actual request).
+		next.ServeHTTP(w, r)
 	})
 }
 
