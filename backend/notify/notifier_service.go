@@ -2,11 +2,8 @@
 // real-time messages and updates to users. It includes the Notifier struct and
 // its associated methods for processing notifications, formatting them, and
 // delivering them to specified targets.
-
 package notify
 
-// Imports necessary packages for JSON encoding, WebSocket communication, HTTP handling,
-// database interaction, and time utilities.
 import (
 	"bytes"
 	"encoding/json"

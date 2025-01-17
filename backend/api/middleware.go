@@ -4,15 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/Pomog/sn/backend/database"
 	"github.com/Pomog/sn/backend/router"
 	"log"
 	"net/http"
 	"strconv"
 	"time"
 )
-
-var Database *database.Database
 
 // ExtendSession refreshes the session expiration time if a valid session cookie exists.
 func ExtendSession(next http.Handler) http.Handler {

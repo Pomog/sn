@@ -10,8 +10,6 @@ import (
 	"time"
 )
 
-const sessionDuration = 24 * time.Hour
-
 // writeJSON sends a JSON response to the client. Triggers a panic if encoding fails.
 func writeJSON(w http.ResponseWriter, payload interface{}) {
 	w.Header().Set("Content-Type", "application/json")

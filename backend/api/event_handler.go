@@ -3,15 +3,12 @@ package api
 import (
 	"encoding/json"
 	"github.com/Pomog/sn/backend/models"
-	"github.com/Pomog/sn/backend/notify"
 	"github.com/Pomog/sn/backend/router"
 	"log"
 	"net/http"
 	"strconv"
 	"time"
 )
-
-var Notify *notify.Notifier
 
 // CreateEvent handles the creation of a new event.
 // Ensures the user has access to the associated group before creating the event.
