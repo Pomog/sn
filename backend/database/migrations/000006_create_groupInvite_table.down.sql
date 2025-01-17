@@ -1,1 +1,1 @@
-DROP TABLE groupInvite;
+DROP TABLE IF EXISTS groupInvite;

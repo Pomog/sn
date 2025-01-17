@@ -1,1 +1,1 @@
-DROP TABLE group;
+DROP TABLE IF EXISTS group;
