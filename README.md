@@ -19,5 +19,5 @@ migrate create -ext sql -dir database/migrations -seq create_event_table
 migrate create -ext sql -dir database/migrations -seq create_postAllowedUser_table
 migrate create -ext sql -dir database/migrations -seq create_groupRequest_table
 migrate create -ext sql -dir database/migrations -seq create_messageUser_table
-
+migrate create -ext sql -dir database/migrations -seq create_comment_table
 ```
