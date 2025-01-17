@@ -14,5 +14,10 @@ migrate create -ext sql -dir database/migrations -seq create_groupMember_table
 migrate create -ext sql -dir database/migrations -seq create_follow_table
 migrate create -ext sql -dir database/migrations -seq create_followRequest_table
 migrate create -ext sql -dir database/migrations -seq create_event_table
+migrate create -ext sql -dir database/migrations -seq create_eventMember_table
+migrate create -ext sql -dir database/migrations -seq create_event_table
+migrate create -ext sql -dir database/migrations -seq create_postAllowedUser_table
+migrate create -ext sql -dir database/migrations -seq create_groupRequest_table
+migrate create -ext sql -dir database/migrations -seq create_messageUser_table
 
 ```
