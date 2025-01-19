@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS messageUser;
+
+DROP INDEX IF EXISTS messageUser_SR;
+DROP INDEX IF EXISTS messageUser_RS;
+
+DROP TABLE IF EXISTS messageGroup;
+
+DROP INDEX IF EXISTS messageGroup_SR;
+DROP INDEX IF EXISTS messageGroup_RS;

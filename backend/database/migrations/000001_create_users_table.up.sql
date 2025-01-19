@@ -1,5 +1,13 @@
 PRAGMA foreign_keys = OFF;
 
+-- Create the file table
+CREATE TABLE `file` (
+                        `token`      TEXT PRIMARY KEY,    -- Unique file identifier
+                        `name`       TEXT NOT NULL,       -- File name
+                        `extension`  TEXT NOT NULL,       -- File extension
+                        `created`    DATE NOT NULL DEFAULT CURRENT_TIMESTAMP -- Creation timestamp
+);
+
 -- Create the user table
 CREATE TABLE `user` (
                         `userID`    INTEGER PRIMARY KEY AUTOINCREMENT,  -- Unique user identifier
@@ -22,5 +30,4 @@ CREATE TABLE `user` (
 INSERT INTO user (userID, email, password, firstname, lastname, image, birthday)
 VALUES (0, '', '', 'System', '', null, CURRENT_TIMESTAMP);
 
--- Re-enable foreign key checks
 PRAGMA foreign_keys = ON;

@@ -1,7 +1,9 @@
 PRAGMA foreign_keys = OFF;
 
--- Drop the user table if it exists
+-- Drop the user table
 DROP TABLE IF EXISTS `user`;
 
--- Re-enable foreign key checks
+-- Drop the file table
+DROP TABLE IF EXISTS `file`;
+
 PRAGMA foreign_keys = ON;
