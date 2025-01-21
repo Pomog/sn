@@ -12,13 +12,13 @@ import (
 	"net/mail"
 )
 
-type credentials struct {
+type userCredentials struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
 // Validate validates the provided credentials.
-func (c *credentials) Validate() error {
+func (c *userCredentials) Validate() error {
 	if _, err := mail.ParseAddress(c.Email); err != nil {
 		return errors.New("invalid email")
 	}
@@ -31,7 +31,7 @@ func (c *credentials) Validate() error {
 }
 
 var loginHandler = func(ctx *socialnetwork.Context) {
-	var credentials = credentials{}
+	var credentials = userCredentials{}
 
 	if err := ctx.BodyParser(&credentials); err != nil {
 		ctx.Status(http.StatusInternalServerError).JSON(map[string]interface{}{
