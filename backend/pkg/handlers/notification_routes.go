@@ -1,4 +1,3 @@
-// Package handlers contains the handler functions for various routes related to notifications.
 package handlers
 
 import (

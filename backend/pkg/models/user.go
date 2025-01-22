@@ -77,14 +77,14 @@ func (u *User) Validate(db *sql.DB) error {
 }
 
 // Create a new user
-func (user *User) Create(db *sql.DB) error {
+func (u *User) Create(db *sql.DB) error {
 	// Mux.Lock()
 	// defer Mux.Unlock()
 	// Define the user default properties
-	user.ID = uuid.New()
+	u.ID = uuid.New()
 	// user.Pseudo = uuid.NewString()
-	user.CreatedAt = time.Now()
-	user.UpdatedAt = time.Now()
+	u.CreatedAt = time.Now()
+	u.UpdatedAt = time.Now()
 	// if user.Nickname == "" {
 	// 	user.Nickname = uuid.NewString()
 	// }
@@ -98,19 +98,19 @@ func (user *User) Create(db *sql.DB) error {
 	defer stmt.Close()
 
 	_, err = stmt.Exec(
-		user.ID.String(),
-		html.EscapeString(user.Email),
+		u.ID.String(),
+		html.EscapeString(u.Email),
 		// user.Pseudo,
-		user.Password,
-		html.EscapeString(user.FirstName),
-		html.EscapeString(user.LastName),
-		user.DateOfBirth,
-		html.EscapeString(user.AvatarImage),
-		html.EscapeString(user.Nickname),
-		html.EscapeString(user.AboutMe),
-		user.IsPublic,
-		user.CreatedAt,
-		user.UpdatedAt,
+		u.Password,
+		html.EscapeString(u.FirstName),
+		html.EscapeString(u.LastName),
+		u.DateOfBirth,
+		html.EscapeString(u.AvatarImage),
+		html.EscapeString(u.Nickname),
+		html.EscapeString(u.AboutMe),
+		u.IsPublic,
+		u.CreatedAt,
+		u.UpdatedAt,
 	)
 	if err != nil {
 		return fmt.Errorf("unable to execute the query. %v", err)
@@ -120,7 +120,7 @@ func (user *User) Create(db *sql.DB) error {
 }
 
 // Get a user by its ID
-func (user *User) Get(db *sql.DB, identifier interface{}, password ...bool) error {
+func (u *User) Get(db *sql.DB, identifier interface{}, password ...bool) error {
 	// Mux.RLock()
 	// defer Mux.RUnlock()
 	query := `SELECT id, email, password, first_name, last_name, date_of_birth, avatar_image, nickname, about_me, is_public, created_at, updated_at FROM users WHERE id=$1 OR email=$1 OR nickname=$1`
@@ -132,48 +132,48 @@ func (user *User) Get(db *sql.DB, identifier interface{}, password ...bool) erro
 	switch identifier.(type) {
 	case string:
 		err := stmt.QueryRow(identifier).Scan(
-			&user.ID,
-			&user.Email,
+			&u.ID,
+			&u.Email,
 			// &user.Pseudo,
-			&user.Password,
-			&user.FirstName,
-			&user.LastName,
-			&user.DateOfBirth,
-			&user.AvatarImage,
-			&user.Nickname,
-			&user.AboutMe,
-			&user.IsPublic,
-			&user.CreatedAt,
-			&user.UpdatedAt,
+			&u.Password,
+			&u.FirstName,
+			&u.LastName,
+			&u.DateOfBirth,
+			&u.AvatarImage,
+			&u.Nickname,
+			&u.AboutMe,
+			&u.IsPublic,
+			&u.CreatedAt,
+			&u.UpdatedAt,
 		)
 		if err != nil {
 			fmt.Println(err)
 			return fmt.Errorf("unable to execute the query. %v", err)
 		}
 		if (len(password) > 0 && password[0] == false) || len(password) == 0 {
-			user.Password = ""
+			u.Password = ""
 		}
 	case uuid.UUID:
 		err := db.QueryRow(query, identifier).Scan(
-			&user.ID,
-			&user.Email,
+			&u.ID,
+			&u.Email,
 			// &user.Pseudo,
-			&user.Password,
-			&user.FirstName,
-			&user.LastName,
-			&user.DateOfBirth,
-			&user.AvatarImage,
-			&user.Nickname,
-			&user.AboutMe,
-			&user.IsPublic,
-			&user.CreatedAt,
-			&user.UpdatedAt,
+			&u.Password,
+			&u.FirstName,
+			&u.LastName,
+			&u.DateOfBirth,
+			&u.AvatarImage,
+			&u.Nickname,
+			&u.AboutMe,
+			&u.IsPublic,
+			&u.CreatedAt,
+			&u.UpdatedAt,
 		)
 		if err != nil && err != sql.ErrNoRows {
 			return fmt.Errorf("unable to execute the query. %v", err)
 		}
 		if len(password) > 0 && password[0] {
-			user.Password = ""
+			u.Password = ""
 		}
 	default:
 		return fmt.Errorf("unable to execute the query. %v", errors.New("invalid type"))
@@ -183,7 +183,7 @@ func (user *User) Get(db *sql.DB, identifier interface{}, password ...bool) erro
 }
 
 // Update a user
-func (user *User) Update(db *sql.DB) error {
+func (u *User) Update(db *sql.DB) error {
 	// Mux.Lock()
 	// defer Mux.Unlock()
 	query := `UPDATE users SET email=$1, password=$2, first_name=$3, last_name=$4, date_of_birth=$5, avatar_image=$6, nickname=$7, about_me=$8, is_public=$9, updated_at=$10 WHERE id=$11`
@@ -195,17 +195,17 @@ func (user *User) Update(db *sql.DB) error {
 	defer stmt.Close()
 
 	_, err = stmt.Exec(
-		html.EscapeString(user.Email),
-		html.EscapeString(user.Password),
-		html.EscapeString(user.FirstName),
-		html.EscapeString(user.LastName),
-		user.DateOfBirth,
-		html.EscapeString(user.AvatarImage),
-		html.EscapeString(user.Nickname),
-		html.EscapeString(user.AboutMe),
-		user.IsPublic,
+		html.EscapeString(u.Email),
+		html.EscapeString(u.Password),
+		html.EscapeString(u.FirstName),
+		html.EscapeString(u.LastName),
+		u.DateOfBirth,
+		html.EscapeString(u.AvatarImage),
+		html.EscapeString(u.Nickname),
+		html.EscapeString(u.AboutMe),
+		u.IsPublic,
 		time.Now(),
-		user.ID,
+		u.ID,
 		// user.Pseudo,
 	)
 
@@ -217,7 +217,7 @@ func (user *User) Update(db *sql.DB) error {
 }
 
 // Delete a user
-func (user *User) Delete(db *sql.DB) error {
+func (u *User) Delete(db *sql.DB) error {
 	query := `UPDATE users SET deleted_at=$1 WHERE id=$2`
 
 	stmt, err := db.Prepare(query)
@@ -226,7 +226,7 @@ func (user *User) Delete(db *sql.DB) error {
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(time.Now(), user.ID)
+	_, err = stmt.Exec(time.Now(), u.ID)
 	if err != nil {
 		return fmt.Errorf("unable to execute the query. %v", err)
 	}
