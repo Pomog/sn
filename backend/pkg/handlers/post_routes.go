@@ -83,6 +83,11 @@ func insertCommentHandler(ctx *socialnetwork.Context) {
 // Handler for fetching the feed posts available to the user
 func feedHandler(ctx *socialnetwork.Context) {
 	feedPosts := models.Posts{}
+
+	fmt.Println("func feedHandler(ctx *socialnetwork.Context) { *******************************************")
+	fmt.Println(ctx)
+	fmt.Printf("Type of userId: %T\n", ctx.Values["userId"])
+
 	user := ctx.Values["userId"].(uuid.UUID)
 
 	// Fetch posts accessible to the user based on their permissions

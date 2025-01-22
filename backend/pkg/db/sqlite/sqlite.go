@@ -17,7 +17,7 @@ type Migrations struct {
 }
 
 // OpenDB opens the SQLite database and applies migrations if needed.
-func OpenDB(migration *Migrations) *sql.DB { // Pass by reference
+func OpenDB(migration Migrations) *sql.DB { // Pass by reference
 	DB, err := sql.Open("sqlite3", "./pkg/db/sqlite/social-network.db")
 	if err != nil {
 		log.Println(err)

@@ -34,7 +34,7 @@ func main() {
 	app := initializeApp()
 
 	// Configure and set up the database
-	database := sqlite.OpenDB(&migrate)
+	database := sqlite.OpenDB(migrate)
 	app.UseDb(database)
 
 	// Add middleware for CORS and static file serving

@@ -14,7 +14,7 @@ import (
 )
 
 // Migration performs the database migration based on the specified action.
-func Migration(DB *sql.DB, migration *Migrations) { // Pass by reference
+func Migration(DB *sql.DB, migration Migrations) { // Pass by reference
 	// Get the current working directory
 	currentDir, err := os.Getwd()
 	if err != nil {

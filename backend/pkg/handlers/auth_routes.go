@@ -6,6 +6,7 @@ import (
 	"Social_Network/pkg/middleware"
 	"Social_Network/pkg/models"
 	"errors"
+	"fmt"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
@@ -212,7 +213,15 @@ var logoutRoute = route{
 }
 
 func meHandler(ctx *socialnetwork.Context) {
-	userId := ctx.Values["userId"].(uuid.UUID)
+	fmt.Println("ctx *******************************************")
+	fmt.Println(ctx)
+	fmt.Printf("Type of userId: %T\n", ctx.Values["userId"])
+
+	userId, _ := ctx.Values["userId"].(uuid.UUID)
+
+	fmt.Println("userId *******************************************")
+	fmt.Println(userId)
+
 	user := models.User{}
 	err := user.Get(ctx.Db.Conn, userId)
 	if err != nil {

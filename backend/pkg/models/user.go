@@ -179,6 +179,10 @@ func (u *User) Get(db *sql.DB, identifier interface{}, password ...bool) error {
 		return fmt.Errorf("unable to execute the query. %v", errors.New("invalid type"))
 	}
 
+	fmt.Println("identifier ********************")
+	fmt.Println(identifier)
+	fmt.Println("USER ********************")
+	fmt.Println(u)
 	return nil
 }
 
