@@ -3,6 +3,7 @@ package middleware
 import (
 	socialnetwork "Social_Network/app"
 	"Social_Network/pkg/config"
+	"fmt"
 	"net/http"
 	"os"
 	"strings"
@@ -28,6 +29,9 @@ func AuthRequired(ctx *socialnetwork.Context) {
 
 	// Retrieve the user ID from the session
 	userId, err := config.Sess.Start(ctx).Get(token)
+	fmt.Println("// Retrieve the user ID from the session")
+	fmt.Println(userId)
+
 	if err != nil {
 		// Respond with an error if the user is not authenticated
 		ctx.Status(http.StatusUnauthorized).JSON(map[string]string{

@@ -121,6 +121,10 @@ func (u *User) Create(db *sql.DB) error {
 
 // Get a user by its ID
 func (u *User) Get(db *sql.DB, identifier interface{}, password ...bool) error {
+	if identifier == "" {
+		fmt.Println("identifier cannot be an empty string")
+		return errors.New("identifier cannot be an empty string")
+	}
 	// Mux.RLock()
 	// defer Mux.RUnlock()
 	query := `SELECT id, email, password, first_name, last_name, date_of_birth, avatar_image, nickname, about_me, is_public, created_at, updated_at FROM users WHERE id=$1 OR email=$1 OR nickname=$1`
@@ -129,8 +133,12 @@ func (u *User) Get(db *sql.DB, identifier interface{}, password ...bool) error {
 		return fmt.Errorf("unable to execute the query. %v", err)
 	}
 	defer stmt.Close()
-	switch identifier.(type) {
+	switch id := identifier.(type) {
 	case string:
+		if id == "" {
+			return errors.New("identifier cannot be an empty string")
+		}
+
 		err := stmt.QueryRow(identifier).Scan(
 			&u.ID,
 			&u.Email,
@@ -154,6 +162,11 @@ func (u *User) Get(db *sql.DB, identifier interface{}, password ...bool) error {
 			u.Password = ""
 		}
 	case uuid.UUID:
+		if id == uuid.Nil {
+			fmt.Println("identifier cannot be nil UUID")
+			return errors.New("identifier cannot be nil UUID")
+		}
+
 		err := db.QueryRow(query, identifier).Scan(
 			&u.ID,
 			&u.Email,
@@ -176,7 +189,8 @@ func (u *User) Get(db *sql.DB, identifier interface{}, password ...bool) error {
 			u.Password = ""
 		}
 	default:
-		return fmt.Errorf("unable to execute the query. %v", errors.New("invalid type"))
+		fmt.Println("identifier type not supported")
+		return errors.New("identifier type not supported")
 	}
 
 	fmt.Println("identifier ********************")

@@ -5,6 +5,7 @@ import (
 	"Social_Network/pkg/config"
 	"Social_Network/pkg/middleware"
 	"Social_Network/pkg/models"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/google/uuid"
@@ -59,6 +60,9 @@ var loginHandler = func(ctx *socialnetwork.Context) {
 		Password: credentials.Password,
 	}
 
+	fmt.Println("newUser loginHandler ************************")
+	fmt.Println(newUser)
+
 	err := newUser.Get(ctx.Db.Conn, credentials.Email, true)
 	if err != nil {
 		ctx.Status(http.StatusUnauthorized).JSON(map[string]interface{}{
@@ -90,12 +94,17 @@ var loginHandler = func(ctx *socialnetwork.Context) {
 		})
 		return
 	}
+
 	ctx.JSON(map[string]interface{}{
 		"session": idSession,
 		"message": "User successfully logged.",
 		"status":  "200",
 		"data":    newUser,
 	})
+
+	fmt.Println("ctx.JSON(map[string]interface{}{")
+	fmt.Printf("Context: %+v\n", ctx)
+	debugContext(ctx)
 }
 
 var loginRoute = route{
@@ -214,7 +223,7 @@ var logoutRoute = route{
 
 func meHandler(ctx *socialnetwork.Context) {
 	fmt.Println("ctx *******************************************")
-	fmt.Println(ctx)
+	fmt.Printf("Context: %+v\n", ctx)
 	fmt.Printf("Type of userId: %T\n", ctx.Values["userId"])
 
 	userId, _ := ctx.Values["userId"].(uuid.UUID)
@@ -225,6 +234,7 @@ func meHandler(ctx *socialnetwork.Context) {
 	user := models.User{}
 	err := user.Get(ctx.Db.Conn, userId)
 	if err != nil {
+		fmt.Println("Error retrieving user:", err)
 		ctx.Status(http.StatusInternalServerError)
 		return
 	}
@@ -246,4 +256,13 @@ func init() {
 	AllHandler[meRoute.path] = meRoute
 	AllHandler[registrationRoute.path] = registrationRoute
 	AllHandler[healthRoute.path] = healthRoute
+}
+
+func debugContext(ctx *socialnetwork.Context) {
+	jsonData, err := json.MarshalIndent(ctx, "", "  ")
+	if err != nil {
+		fmt.Println("Error serializing context to JSON:", err)
+		return
+	}
+	fmt.Println(string(jsonData))
 }

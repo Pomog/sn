@@ -4,6 +4,7 @@ import (
 	socialnetwork "Social_Network/app"
 	"Social_Network/pkg/config"
 	"Social_Network/pkg/models"
+	"fmt"
 	"github.com/google/uuid"
 	"io"
 	"log"
@@ -287,6 +288,8 @@ func IsGroupExist(c *socialnetwork.Context) {
 }
 func IsInvitedUserExist(c *socialnetwork.Context) {
 	_userId := c.Request.URL.Query().Get("user_id")
+	fmt.Println("IsInvitedUserExist(c *socialnetwork.Context) {")
+	fmt.Println("_userId")
 	user := new(models.User)
 	userId, err := uuid.Parse(_userId)
 	if err != nil {
