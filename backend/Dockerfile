@@ -14,7 +14,7 @@ COPY . .
 # Build the Go application
 RUN go build -o main .
 
-# Expose port 8080 to the outside world
+# Expose port 8081 to the outside world
 EXPOSE 8081
 
 # Command to run the executable

@@ -30,5 +30,13 @@ npm install
 npm run dev
 ```
 
+### Docker
+```
+docker-compose up --build
+
+docker-compose down
+```
+
+
 # The frontend runs on
 http://localhost:3000/
