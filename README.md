@@ -2,6 +2,11 @@
 ## Using the Makefile
 Navigate to the root of the project
 ```bash
+cd "Social Network"
+```
+
+## Linux with MakeFile
+```bash
 make all
 ```
 

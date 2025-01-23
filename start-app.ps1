@@ -1,23 +1,17 @@
-# start-app.ps1
 <#
     Script to streamline starting the Social Network app
 #>
 
-# Function to run the backend
+# Function to run the backend in a new terminal window
 function Start-Backend {
     Write-Host "Starting Backend..." -ForegroundColor Cyan
-    Push-Location "backend"
-    go run .
-    Pop-Location
+    Start-Process "powershell.exe" -ArgumentList "-NoExit", "-Command", "cd backend; go run ."
 }
 
-# Function to run the frontend
+# Function to run the frontend in a new terminal window
 function Start-Frontend {
     Write-Host "Starting Frontend..." -ForegroundColor Cyan
-    Push-Location "client"
-    npm install
-    npm run dev
-    Pop-Location
+    Start-Process "powershell.exe" -ArgumentList "-NoExit", "-Command", "cd client; npm install; npm run dev"
 }
 
 # Main function
