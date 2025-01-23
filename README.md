@@ -10,6 +10,12 @@ cd "Social Network"
 make all
 ```
 
+## Linus with Bash
+```bash
+chmod +x start_social_network.sh
+./start_social_network.sh
+```
+
 ## Using PowerShell (Windows)
 ```powershell
 .\start-app.ps1
