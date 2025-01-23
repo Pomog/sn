@@ -8,6 +8,7 @@ const ONE_WEEK = ONE_DAY * 7;
 export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
+
   app: {
     head: {
       link: [
@@ -23,9 +24,11 @@ export default defineNuxtConfig({
       ],
     }
   },
+
   css: [
     '~/assets/css/style.css',
   ],
+
   modules: [
     '@nuxt/ui',
     '@vueuse/nuxt',
@@ -36,12 +39,15 @@ export default defineNuxtConfig({
     'nuxt-icon',
     '@samk-dev/nuxt-uikit3'
   ],
+
   colorMode: {
     classSuffix: '',
   },
+
   typescript: {
     includeWorkspace: true,
   },
+
   imports: {
     dirs: [
       resolve('./composables'), '~/composables',
@@ -51,12 +57,15 @@ export default defineNuxtConfig({
       resolve('~/utils'), '~/utils'
     ],
   },
+
   image: {
     domains: ['localhost:8081'],
   },
+
   pinia: {
     storesDirs: ['~/stores/**', '#/stores/**', '@/stores/**'],
   },
+
   runtimeConfig: {
     domain: process.env.BACKEND_URL || 'http://localhost:8081',
     cookieName: process.env.COOKIE_NAME || "__social_cookie",
@@ -64,10 +73,13 @@ export default defineNuxtConfig({
     cookieExpires: parseInt(process.env.COOKIE_REMEMBER_ME_EXPIRES || ONE_DAY.toString(), 10), // 1 day
     cookieRememberMeExpires: parseInt(process.env.COOKIE_REMEMBER_ME_EXPIRES || ONE_WEEK.toString(), 10), // 7 days
   },
+
   nitro: {
     experimental: {
       websocket: true,
       tasks: true,
     },
   },
+
+  compatibilityDate: '2025-01-23',
 })

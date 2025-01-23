@@ -218,30 +218,71 @@ func (s *starter) Set(userID uuid.UUID) (string, error) {
 	return sessionID.String(), nil
 }
 
-// Get retrieves the session associated with the provided session ID.
-func (s *starter) Get(sessionID string) (*storage, error) {
+func (s *starter) Get(bearer string) (uuid.UUID, error) {
 	s.session.mu.Lock()
 	defer s.session.mu.Unlock()
 
 	session := s.session
+	c := session.Config
+	db := session.database
 	tmpdata := session.data
 
+	// Retrieve the cookie
+	cookie, err := s.Ctx.Request.Cookie(c.CookieName)
+	if err != nil {
+		// Fallback to the bearer token if the cookie is not found
+		if bearer != "" {
+			cookie = &http.Cookie{
+				Name:  c.CookieName,
+				Value: bearer,
+			}
+		} else {
+			return uuid.Nil, fmt.Errorf("error retrieving cookie: %v", err)
+		}
+	}
+
+	// Get the session ID from the cookie
+	sessionID := cookie.Value
+
 	// Check if the session exists in memory
-	sessionData, ok := tmpdata.Load(sessionID)
-	if !ok {
-		return nil, fmt.Errorf("session not found")
-	}
-	data := sessionData.(map[string]interface{})
-	cookie := data["cookie"].(*storage)
+	value, ok := tmpdata.Load(sessionID)
+	if ok {
+		val := value.(map[string]interface{})
+		userKey := val["key"].(uuid.UUID)
+		storage := val["cookie"].(*storage)
 
-	// Check if the session is expired
-	if time.Now().After(cookie.cookie.Expires) {
-		tmpdata.Delete(sessionID)
-		Notif.Store(cookie.id, false) // Notify that the session has expired
-		return nil, fmt.Errorf("session expired")
+		// Check if the session is expired
+		expirationDate := storage.cookie.Expires
+		if time.Now().After(expirationDate) {
+			tmpdata.Delete(sessionID)
+			Notif.Store(userKey, false) // Notify that the session has expired
+			return uuid.Nil, fmt.Errorf("session expired")
+		} else {
+			Notif.Store(userKey, true)
+			return storage.id, nil
+		}
 	}
 
-	return cookie, nil
+	// If the session is not in memory, check the database
+	if db != nil {
+		var userID uuid.UUID
+		var expirationDate time.Time
+		err = db.QueryRow(fmt.Sprintf("SELECT user_id, expiration_date FROM %s WHERE id = $1", session.SessionName), sessionID).Scan(&userID, &expirationDate)
+		if err != nil {
+			return uuid.Nil, fmt.Errorf("error retrieving session from database: %v", err)
+		}
+
+		// Check if the session is expired
+		if time.Now().After(expirationDate) {
+			Notif.Store(userID, false)
+			return uuid.Nil, fmt.Errorf("session expired")
+		}
+		Notif.Store(userID, true)
+		return userID, nil
+	}
+
+	// Return an error if no valid session is found
+	return uuid.Nil, fmt.Errorf("session not found")
 }
 
 // Valid checks if the session is valid by verifying its expiration and existence in memory.
